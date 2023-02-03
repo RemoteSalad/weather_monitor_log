@@ -8,7 +8,8 @@ remote_write:
 #remote_read: ???
 
 scrape_configs:
-  - job_name: 'openweather-exporter'
+  - job_name: 'openweather-exporter-1'
     scrape_interval: 60s
     static_configs:
-      - targets: ['openweather-exporter:9091']
+        - targets: ['localhost:9091']
+      # - targets: ['openweather-exporter-1:9091']

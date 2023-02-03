@@ -61,6 +61,10 @@ Multi-target exporter? ElasticSearch Exporter?
 
 Is Apple's Weatherkit also an option? (https://developer.apple.com/weatherkit/)
 
+Add versions + dependancies list
+
+Trying to use swarm with secrets failed. Ugly store the apikey for now then bind mount later
+
 <br>
 
 ---

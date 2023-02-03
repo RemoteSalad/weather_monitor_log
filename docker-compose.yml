@@ -1,0 +1,16 @@
+services:
+# prometheus-0:
+# prometheus-1:
+# 
+  openweather-exporter-1:
+    image: billykwooten/openweather-exporter
+    container_name: openweather-exporter
+    restart: always
+    ports:
+      - 9091:9091
+    environment:
+      - OW_DEGREES_UNIT=C
+      - OW_LANGUAGE=EN
+      - OW_CITY="Tokyo, JP|Osaka, JP|Fukuoka, JP"
+      - OW_APIKEY= <secret>
+      - OW_LISTEN_ADDRESS=9091

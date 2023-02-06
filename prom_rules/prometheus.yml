@@ -7,6 +7,8 @@ rule_files:
 # remote_write:
 # remote_read:
 
+# Consolidate this into a 'OWE-EastAsia' with 3 targets?
+#I think that will be good, since we will loop in a nginx, prometheus watching itself + buddy
 scrape_configs:
   - job_name: 'OWE-Japan' # Matches with the job label
     scrape_interval: 60s

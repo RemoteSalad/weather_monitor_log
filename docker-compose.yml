@@ -9,9 +9,9 @@ services:
       - type: bind
         source: ./prom_rules/prometheus.yml #try this non relative ##better not for portability
         target: /etc/prometheus/prometheus.yml
-      # - type: volume
-      #   source: prometheus_tsdb
-      #   target: /prometheus #this the path inside the container
+      - type: volume
+        source: prometheus_tsdb
+        target: /prometheus #this the path inside the container
  
   OWE-Japan:
     image: billykwooten/openweather-exporter
@@ -41,10 +41,10 @@ services:
     environment:
       - OW_CITY="Seoul, SK|Busan, SK|Gyeongju, SK"
 
-
-# volumes:
-#   prometheus_tsdb: #this declaration lets it be used across multiple services; it doesn't 
-
+# I really do want to make this a declared location on the vm, but I will try letting Docker manage it and see how it feels [JP 2/6]
+volumes:
+  prometheus_tsdb: #this declaration lets it be used across multiple services; 
+    driver: local
 # This adds that file to the /run/secrets directory in any designated
 # containers. One option is to then add a script to the container so that it loads
 # the value of that into environment variables. Using $() statements proved ineffective.

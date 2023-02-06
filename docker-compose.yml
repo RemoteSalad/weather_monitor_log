@@ -1,45 +1,33 @@
-version: '.1'
-
-secrets:
-  OpenWeather_api_key:
-    external: true
-  test_access:
-    file: ./openweathermap_api_keys/test_access
-    external: true
-
 services:
-  prometheus-0:
+  prometheus:
     image: prom/prometheus
-    container_name: prometheus-0
+    container_name: prometheus
     restart: always
     ports:
       - 9090:9090
     volumes:
       - type: bind
-        source: ./prom_rules/prometheus.yml
+        source: ./prom_rules/prometheus.yml #try this non relative
         target: /etc/prometheus/prometheus.yml
-# suggested command from prometheus image
-# docker run \
-#     -p 9090:9090 \
-#     -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml \
-#     prom/prometheus
-# prometheus-1:
-# 
-  openweather-exporter-1:
+ 
+  openweather-exporter:
     image: billykwooten/openweather-exporter
     container_name: openweather-exporter
     restart: always
     ports:
-      - 9091:9091
+      - 9091:9091  #no need to expose port to host
+    env_file: ./openweathermap_api_keys/keys.env
     environment:
       - OW_DEGREES_UNIT=C
       - OW_LANGUAGE=EN
       - OW_CITY="Tokyo, JP|Osaka, JP|Fukuoka, JP"
-      - OW_APIKEY=dummy_value
-      #This is to test if we can access it in the container
-      - TEST_ACCESS_FILE=
-      - OW_LISTEN_ADDRESS=9091
-# Secret was created beforehand with 'docker secret create ...'; Having it created in line(docker compose) is also a nice idea
-    secrets:
-      - OpenWeather_api_key
-      - test_access
+      - OW_LISTEN_ADDRESS=:9091 #missing the colon cause an issue with the port sending out; where the exporter sends
+    # secrets:
+    #   - OW_API_key1
+
+# This adds that file to the /run/secrets directory in any designated
+# containers. One option is to then add a script to the container so that it loads
+# the value of that into environment variables. Using $() statements proved ineffective.
+# secrets:
+#   OpenWeather_API_key:
+#       file: ./openweathermap_api_keys/api_key1

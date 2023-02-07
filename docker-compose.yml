@@ -7,19 +7,16 @@ services:
       - 9090:9090
     volumes:
       - type: bind
-        source: ./prom_rules/prometheus.yml #try this non relative ##better not for portability
+        source: ./prom_rules/prometheus.yml
         target: /etc/prometheus/prometheus.yml
       - type: volume
-        # source: weather_project_prometheus_tsdb
         source: prometheus_tsdb
         target: /prometheus #this the path inside the container
  
   OWE-Japan:
     image: billykwooten/openweather-exporter
-    container_name: OWE-Japan # don't use this field if container is suppsoed to be scaled
+    container_name: OWE-Japan
     restart: unless-stopped
-    # ports:
-    #   - 9091:9091  #no need to expose port to host
     env_file: [./openweathermap_api_keys/keys.env, owe.env]
     environment:
       - OW_CITY="Tokyo, JP|Osaka, JP|Fukuoka, JP"
@@ -47,16 +44,9 @@ services:
 
 # I really do want to make this a declared location on the vm, but I will try letting Docker manage it and see how it feels [JP 2/6]
 volumes:
-#attempts - works, now should be outside compose lifecycle
   prometheus_tsdb:
     external: true
     name: "weather_monitor_log_prometheus_tsdb"
-  # weather_project_prometheus_tsdb:
-  #  external: true
-#works but is in compose lifecycle
-  # prometheus_tsdb: #this declaration lets it be used across multiple services; 
-  #   driver: local
-
 
 # This adds that file to the /run/secrets directory in any designated
 # containers. One option is to then add a script to the container so that it loads

@@ -26,6 +26,17 @@
 ## Redundancy:
 *   Create redundancy for Prometheus, Grafana, etc.
     * Also the alertmanager?
+*   Prometheus redundancy seems like the biggest can of worms. Potential questions are:
+    * Do the storage volumes point to the same place or are they separate?
+        * does that involve using remote_write/read in addition to docker's named volumes?
+    * How to handle metrics duplication?
+    * Do we implement a load balancer 'in front' of prom & grafana
+    * Related: I believe grafana dodges the redundance issue as it just reads from others, but what of alertmanager? How does that handle the duplication?
+        * Relevant links: <br> 
+            https://stackoverflow.com/questions/47215492/how-can-we-get-high-availability-in-prometheus-data-store <br>
+            https://medium.com/miro-engineering/prometheus-high-availability-and-fault-tolerance-strategy-long-term-storage-with-victoriametrics-82f6f3f0409e
+            https://hevodata.com/learn/prometheus-high-availability/ <br>
+            https://prometheus.io/docs/prometheus/latest/federation/
 
 
 ## Unscheduled Tasks:

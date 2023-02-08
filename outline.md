@@ -1,20 +1,20 @@
 
-## Stage 1:
+## &#9745; Stage 1:
 *   Fill in template configs for base Prometheus and Weather Exporters
     * Weather API key
 *   Make first version of docker-compose.yml
 
 
-## Stage 2:
-*   Add Grafana container for another frontend
+## &#9744; Stage 2:
+*   Add Grafana container for another front end
 *   Add Alertmanager
 *   Use Secrets for API key
 
-## Stage 3:
+## &#9744; Stage 3:
 *   Create an outflow for Alertmanager to ping slack channel/users (email as well?)
 *   Define more complex storage options (updating configs while live, saving of tsdb, dashboard configs)
 
-## Stage 4:
+## &#9744; Stage 4:
 *   Integrate an Logstash/ElasticSearch/Kibana stack for grabbing each container's logs
 
 <br>
@@ -32,6 +32,7 @@
     * How to handle metrics duplication?
     * Do we implement a load balancer 'in front' of prom & grafana
     * Related: I believe grafana dodges the redundance issue as it just reads from others, but what of alertmanager? How does that handle the duplication?
+    * Terraform, Ansible, Thanos were all mentioned as different tools to handle the variation in configs, deployment, storage duplication, etc
         * Relevant links: <br> 
             https://stackoverflow.com/questions/47215492/how-can-we-get-high-availability-in-prometheus-data-store <br>
             https://medium.com/miro-engineering/prometheus-high-availability-and-fault-tolerance-strategy-long-term-storage-with-victoriametrics-82f6f3f0409e
@@ -52,7 +53,18 @@
     * use a Nginx exporter to observe site traffic
 *   Look & Understand the OpenWeatherMap exporter code
     *   Compare the output of the exporter and usual api call
-    
+*   Document the creation of volumes externally as they cannot be included in the compose file; mountpoints are in compsoe
+    *   $docker volume create grafana-weather
+        $docker volume create prometheus-weather-tsdb
+*   Rename prom & graf containers to not be so generic -> imagine having other projects with those container hanging out?
+
+*   CLI for the grafana docker independent: <tt> docker run -dp 3000:3000 --name=grafana --network weather_monitor_log_default -v grafana-weather:/var/lib/grafana grafana/grafana-oss </tt>
+
+*   Add custom grafana plug-ins to the prebuild? Somehow have those relevant plugins to the dashboard?  Better would be to have that built in somehow with a lot of predefined dashboards (i.e. the end user would have minor set up,[define target cities, put in api key, create volumes/bind mounts --- Hey that's an idea. put all this into a little script that runs at the beginning] and then start with a more or less set up dashboard) - but still something not so clunky as to prevent using more recent grafana/prometheus images.
+
+*   Review naming schemas for consistent usages (e.g. prometheus volume is named with an underscore while grafana's is a hyphenated)
+*   Create Schema map using Markdown's mermaid
+
 ## Goals:
 *   Use Docker Secrets
 *   Mix use of bind mounts and named volumes

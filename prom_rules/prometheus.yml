@@ -17,3 +17,6 @@ scrape_configs:
     scrape_interval: 60s
     static_configs:
       - targets: ['OWE-Japan:9091','OWE-Taiwan:9091','OWE-Korea:9091'] # Where prometheus looks. Multiple paths accepted. Matches with the instance label
+  - job_name: 'Internal_Services'
+    static_configs:
+      - targest: ['grafana:3000']

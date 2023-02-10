@@ -1,0 +1,8 @@
+groups:
+  - name: ServiceAvailability
+    rules:
+      - alert: InstanceDown
+        expr: up < 1
+        for: 0s 
+        annotations:
+          summary: "{{ $labels.instance }} of {{ $labels.job }} is currently down."

@@ -1,7 +1,7 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
-rule_files: #these may need to be absolute
+rule_files: #these may need to be absolute / they are interpreted correctly to the absolute directory..hmmm
   - prometheus.rules.yml
   - alerts/*
 # remote_write:
@@ -13,7 +13,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          # - alertmanager:9093
+          - alertmanager:9093
 
 scrape_configs:
   - job_name: 'Prometheus'
@@ -24,4 +24,4 @@ scrape_configs:
       - targets: ['OWE-Japan:9091','OWE-Taiwan:9091','OWE-Korea:9091'] # Where prometheus looks. Multiple paths accepted. Matches with the instance label
   - job_name: 'Internal_Services'
     static_configs:
-      - targets: ['grafana:3000']
+      - targets: ['grafana:3000', 'alertmanager:9093']

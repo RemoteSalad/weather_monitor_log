@@ -7,11 +7,18 @@ services:
       - 9090:9090
     volumes:
       - type: bind
-        source: ./prom_rules/prometheus.yml
-        target: /etc/prometheus/prometheus.yml
+        source: ./prom_rules
+        target: /etc/prometheus/configs # creates target directory for all configs, leaves symlinks
       - type: volume
         source: prometheus_tsdb
-        target: /prometheus #this the path inside the container
+        target: /prometheus
+    command: [ 
+      "--web.enable-lifecycle", 
+      "--config.file=/etc/prometheus/configs/prometheus.yml",
+      "--storage.tsdb.path=/prometheus",
+      "--web.console.libraries=/usr/share/prometheus/console_libraries",
+      "--web.console.templates=/usr/share/prometheus/consoles"
+      ]
   
   grafana:
     image: grafana/grafana-oss

@@ -88,6 +88,47 @@ Add versions + dependancies list
 
 Trying to use swarm with secrets failed. Ugly store the apikey for now then bind mount later
 
+Try simulating the exporters as offsite (containers across two 2 networks), then port forward/reverse tunnel to have them appear available as on site for the scraping/visualization side
+
+<br>
+
+---
+
+<br>
+
+## Reports:
+
+### TSDB Confusion After Adding "command: --web.enable-lifecycle" to Prometheus Service:
+
+<blockquote>
+
+&emsp;&emsp;&emsp;<ins>2023/2/9</ins>: Because of my unsteadiness surrounding the persistance of Docker's named volumes and the desire to utilize Prometheus's built-in ability to load and use updated config files (including keeping a cached config to use in case the new config is faulty), I tried to implement it in the <tt>service.command</tt> field of the <tt>docker-compose.yml</tt> yesterday. Once I confirmed the syntax for that field and restarted the service using <tt>docker compose up -d</tt> I encountered an issue. Querying the Prometheus service I could not find the past few days of metrics. This was very concerning because I do not yet trust Docker's storage management. Further, I had also changed the bind mount target of the config file for the service, as I wanted to start incorporating alerting and recording rules. (bind mounting a file overwrote the default file in the container, I was concerned doing so for a directory similarly overwrote the directory's contents. I need to follow up regarding mounting directories with and without trailing forward slashes)
+     
+&emsp;&emsp;&emsp;This led me to panic a bit, and after reverting the docker-compose changes and confirming it was working. I stopped working on the project and tried to articulate the potential interactions that caused this issue, as well as a few other questions that could not be pursued given this more pressing issue. I saved the terminal logs to refer back to the output from the container. While referring to the documentation I created prometheus containers while incrementally changing parameters until I discovered that adding command flags overrides all of the 'default' ones designated in the image's Dockerfile. [This](https://docs.docker.com/compose/compose-file/#command) is the part of the documentation that clearly states that behavior.
+
+&emsp;&emsp;&emsp;Further I observed some of Prometheus's tsdb storage behavior. Primarily how Prometheus makes 2 hour chunks of data (in those uniquely named directories), uses the wal file (write-ahead log) for saving data before reaching the two hour mark, and then later compacts those directories into more effecient packages later on. It also seems to write out wal to a storage directory before the two hour time when asked to shutdown. I found that the promtool can be used to back-fill designated recording rules, as they only begin to be generated after a rule is set. I encountered a few potential solutions to running redundant (federated) prometheus with a shared final storage. I have a few supplementary exercises I want to try now, integrating those mis-located metrics data; making a script and cron job to create, check and save each of the docker containers (e.g. use cut and diff to efficiently compare logs between the containers, show the internal file structure, get the runtime sizes of the containers), and how modifying volumes propagates between containers. Also there seems to be some nuance between the different places commanads are passed to a container, "shell form" vs "exec form", and I need to understand that better.
+
+</blockquote>
+
+<!-- Some scratch that went into the report. Hiding for clarity on preview
+
+<ins>abc</ins> how to underline
+> to block quote
+--try git for that testing directory, esp to make a script + cron job to run and test the different containers -> output their logs
+
+saving logs; storage; active queries, reading
+testing methodology, steps, storage, tsdb behavior(head, compaction,), 
+exec form vs shell form for Dockerfile CMD, docerk exec, compose.service.command, docker run commands
+
+There are some trailing questions I would like to resolve. This is solved by giving the rule configs' file paths absolutely, but I am still curious how relative paths are resolved. Is it relative to the config file's location, or the path where Prometheus was executed? (surely the latter - it is the working directory after all)
+
+why is the development named volume /prometheus/prometheus.yml executable? a result of having web.enable-lifecycle?
+
+volume share modification in a running container, exec vs shell form, 405 when trying to curl a running container
+
+remote write/read and some other goals  for having a more interesting virtualized project. federation/HA prometheus
+-->
+
 <br>
 
 ---

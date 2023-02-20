@@ -1,8 +1,9 @@
+### Primary Services
 services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    restart: always
+    restart: "no"
     ports:
       - 9090:9090
     volumes:
@@ -10,7 +11,7 @@ services:
         source: ./prom_rules
         target: /etc/prometheus/configs # creates target directory for all configs, leaves symlinks
       - type: volume
-        source: prometheus_tsdb
+        source: prometheus-tsdb
         target: /prometheus
     command: [ 
       "--web.enable-lifecycle", 
@@ -19,10 +20,11 @@ services:
       "--web.console.libraries=/usr/share/prometheus/console_libraries",
       "--web.console.templates=/usr/share/prometheus/consoles"
       ]
+
   alertmanager:
     image: prom/alertmanager
     container_name: alertmanager
-    restart: always
+    restart: "no"
     ports:
       - 9093:9093
     volumes:
@@ -30,14 +32,13 @@ services:
         source: ./alertmanager/alertmanager.yml
         target: /etc/alertmanager/alertmanager.yml
       - type: volume
-        source: alertmanager_weather
+        source: alertmanager-weather
         target: /alertmanager
-
 
   grafana:
     image: grafana/grafana-oss
     container_name: grafana
-    restart: always
+    restart: "no" 
     ports:
       - 3000:3000
     volumes:
@@ -45,7 +46,8 @@ services:
         source: grafana-weather
         target: /var/lib/grafana
 
- 
+### Weather Scrapers
+
   OWE-Japan:
     image: billykwooten/openweather-exporter
     container_name: OWE-Japan
@@ -73,12 +75,13 @@ services:
       - OW_CITY="Seoul, SK|Busan, SK|Gyeongju, SK"
     profiles: ["scrape"]
 
+### Volume Definitions
 # I really do want to make this a declared location on the vm, but I will try letting Docker manage it and see how it feels [JP 2/6]
+# It definitely made it a bit more of a pain to port when I switched from rootless to rootful docker [JP 2/17]
 volumes:
-  prometheus_tsdb:
+  prometheus-tsdb:
     external: true
-    name: "weather_monitor_log_prometheus_tsdb"
   grafana-weather:
     external: true
-  alertmanager_weather:
+  alertmanager-weather:
     external: true

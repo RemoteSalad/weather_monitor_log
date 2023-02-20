@@ -18,7 +18,9 @@ services:
       "--config.file=/etc/prometheus/configs/prometheus.yml",
       "--storage.tsdb.path=/prometheus",
       "--web.console.libraries=/usr/share/prometheus/console_libraries",
-      "--web.console.templates=/usr/share/prometheus/consoles"
+      "--web.console.templates=/usr/share/prometheus/consoles",
+      "--log.level=debug",
+      "--log.format=json"
       ]
 
   alertmanager:
@@ -34,6 +36,12 @@ services:
       - type: volume
         source: alertmanager-weather
         target: /alertmanager
+    command: [
+      "--config.file=/etc/alertmanager/alertmanager.yml",
+      "--storage.path=/alertmanager",
+      "--log.level=debug",
+      "--log.format=json"
+      ]
 
   grafana:
     image: grafana/grafana-oss
@@ -45,6 +53,9 @@ services:
       - type: volume
         source: grafana-weather
         target: /var/lib/grafana
+      - type: bind
+        source: ./grafana/grafana.ini
+        target: /etc/grafana/grafana.ini
 
 ### Weather Scrapers
 

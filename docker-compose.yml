@@ -57,6 +57,35 @@ services:
         source: ./grafana/grafana.ini
         target: /etc/grafana/grafana.ini
 
+# Currently it works, but surely there is a better implementation that doesn't put the fb container in an elevated directory? Or set it as root?
+### Elastic
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.6.1
+    container_name: filebeat
+    restart: "no"
+    volumes:
+      - type: bind
+        source: ./elastic/filebeat.docker.yml
+        target: /usr/share/filebeat/filebeat.yml
+        read_only: true
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true    
+    command: [
+      "filebeat",
+      "-e",
+      "--strict.perms=false",
+    ]
+    user: root
+    env_file: [./secrets/filebeat.env]
+    profiles: [ "elastic" ]
+    network_mode: bridge
+
 ### Weather Scrapers
 
   OWE-Japan:

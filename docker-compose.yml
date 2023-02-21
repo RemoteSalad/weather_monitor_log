@@ -8,7 +8,7 @@ services:
       - 9090:9090
     volumes:
       - type: bind
-        source: ./prom_rules
+        source: ./prometheus
         target: /etc/prometheus/configs # creates target directory for all configs, leaves symlinks
       - type: volume
         source: prometheus-tsdb
@@ -92,7 +92,7 @@ services:
     image: billykwooten/openweather-exporter
     container_name: OWE-Japan
     restart: unless-stopped
-    env_file: [./openweathermap_api_keys/keys.env, owe.env]
+    env_file: [./secrets/owe_api_keys.env, ./openweather/owe.env]
     environment:
       - OW_CITY="Tokyo, JP|Yokohama, JP|Osaka, JP|Fukuoka, JP"
     profiles: ["scrape"]
@@ -101,7 +101,7 @@ services:
     image: billykwooten/openweather-exporter
     container_name: OWE-Taiwan
     restart: unless-stopped
-    env_file: [./openweathermap_api_keys/keys.env, owe.env]
+    env_file: [./secrets/owe_api_keys.env, ./openweather/owe.env]
     environment:
       - OW_CITY="Taipei, TW| Taichung, TW| Kaohsiung, TW"
     profiles: ["scrape"]
@@ -110,7 +110,7 @@ services:
     image: billykwooten/openweather-exporter
     container_name: OWE-Korea
     restart: unless-stopped
-    env_file: [./openweathermap_api_keys/keys.env, owe.env]
+    env_file: [./secrets/owe_api_keys.env, ./openweather/owe.env]
     environment:
       - OW_CITY="Seoul, SK|Busan, SK|Gyeongju, SK"
     profiles: ["scrape"]

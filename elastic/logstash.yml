@@ -1,0 +1,8 @@
+cloud.auth: elastic:Ud0WaUHAdtShZGhUVzIDq3gP
+cloud.id: Take2:YXAtbm9ydGhlYXN0LTEuYXdzLmZvdW5kLmlvOjQ0MyRhZTA0Nzk2OWUwZDk0NTJkYWNmZGEzNWVmMWZiMGFmNiQ3NmQ1NzEwNDFmZWI0YjY3OWVhMjY1YzExYzYyZjIzOQ==
+http.host: 0.0.0.0
+log.format: json
+pipeline.ordered: false
+xpack.monitoring.elasticsearch.cloud_auth: ${CLOUD_AUTH}
+xpack.monitoring.elasticsearch.cloud_id: ${CLOUD_ID}
+xpack.monitoring.enabled: true

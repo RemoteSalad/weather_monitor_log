@@ -4,15 +4,15 @@ filebeat.config:
     reload.enabled: false
 
 processors:
-#  - add_docker_metadata:
-#      host: "unix:///var/run/docker.sock."
-#      match_fields: ["system.process.cgroup.id"]
-#      match_pids: ["process.pid", "process.parent.pid"]
-#      match_source: true
-#      match_source_index: 4
-#      match_short_id: false
-#      cleanup_timeout: 60
-#      labels.dedot: false
+ - add_docker_metadata:
+     host: "unix:///var/run/docker.sock."
+     match_fields: ["system.process.cgroup.id"]
+     match_pids: ["process.pid", "process.parent.pid"]
+     match_source: true
+     match_source_index: 4
+     match_short_id: false
+     cleanup_timeout: 60
+     labels.dedot: false
  - add_cloud_metadata: ~
 
 filebeat.autodiscover:
@@ -20,6 +20,8 @@ filebeat.autodiscover:
     - type: docker
       hints.enabled: true
 
-
-output.elasticsearch:
-  hosts: ${ELASTIC_CLOUD}
+#maybe there is a more elegant way to write this. Environment variables?
+#It feels funny to have two files that are probably supposed to be identical except for the outbound destination
+output:
+  elasticsearch:
+    hosts: ${ELASTIC_CLOUD}

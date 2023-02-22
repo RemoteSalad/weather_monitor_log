@@ -12,7 +12,7 @@ processors:
      match_source_index: 4
      match_short_id: false
      cleanup_timeout: 60
-     labels.dedot: true
+     labels.dedot: false
  - add_cloud_metadata: ~
 
 filebeat.autodiscover:

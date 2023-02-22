@@ -84,7 +84,49 @@ services:
     user: root
     env_file: [./secrets/filebeat.env]
     profiles: [ "elastic" ]
-    network_mode: bridge
+
+  filebeat-logstash:
+    image: docker.elastic.co/beats/filebeat:8.6.1
+    container_name: filebeat-logstash
+    restart: "no"
+    volumes:
+      - type: bind
+        source: ./elastic/filebeat_logstash.docker.yml
+        target: /usr/share/filebeat/filebeat.yml
+        read_only: true
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true    
+    command: [
+      "filebeat",
+      "-e",
+      "--strict.perms=false",
+    ]
+    user: root
+    profiles: [ "elastic" ]
+
+  logstash:
+    image: logstash:8.6.1
+    container_name: logstash
+    ports:
+      - 5044:5044
+    volumes:
+      - type: bind
+        source: ./elastic/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+      - type: bind
+        source: ./elastic/logstash.conf
+        target: /usr/share/logstash/pipeline/logstash.conf
+      - type: bind
+        source: ./elastic/log4j2.properties
+        target: /usr/share/logstash/config/log4j2.properties
+    env_file: [./secrets/logstash.env]
+    profiles: [ "elastic" ]
 
 ### Weather Scrapers
 

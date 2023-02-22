@@ -1,4 +1,4 @@
-cloud.auth: elastic:Ud0WaUHAdtShZGhUVzIDq3gP
+cloud.auth: elastic:pIuXU2hpdahUVnmACijzzWlZ
 cloud.id: Take2:YXAtbm9ydGhlYXN0LTEuYXdzLmZvdW5kLmlvOjQ0MyRhZTA0Nzk2OWUwZDk0NTJkYWNmZGEzNWVmMWZiMGFmNiQ3NmQ1NzEwNDFmZWI0YjY3OWVhMjY1YzExYzYyZjIzOQ==
 http.host: 0.0.0.0
 log.format: json

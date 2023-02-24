@@ -117,14 +117,11 @@ services:
       - 5044:5044
     volumes:
       - type: bind
-        source: ./elastic/logstash.yml
-        target: /usr/share/logstash/config/logstash.yml
-      - type: bind
         source: ./elastic/logstash.conf
         target: /usr/share/logstash/pipeline/logstash.conf
       - type: bind
-        source: ./elastic/log4j2.properties
-        target: /usr/share/logstash/config/log4j2.properties
+        source: ./elastic/logstash_config/
+        target: /usr/share/logstash/config/
     env_file: [./secrets/logstash.env]
     profiles: [ "elastic" ]
 

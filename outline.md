@@ -179,3 +179,7 @@ cleaning up git project repo.
 Using recommended logstash output index=> ... now conflicts with datastream/elastic manages the indexing
 
 </blockquote>
+
+I had to create a keystore in an instance of the logstash container with the appropriate credentials, and then copy the entire contents of the /usr/share/logstash/config directory into the host project. Now I bind mount that directory on the host (including the default files I haven't changed) because directly binding the logstash.keystore was not recommonded. That encrypted file with the needed credentials
+
+Why did I make this change to using the logstash keystore? Passing the cloud credentials & authentication as referenced environment variables worked except that the Logstash application replaced some of those referenced values to literals during runtime - i.e. visible in the projects Github. That said, I could not bind mount the config as read only. This solution allows contianers to be reproduced the same as before(from a single compose command), with cloud integration, without having secrets revealed inadvertantly.

@@ -5,17 +5,19 @@
 *   Make first version of docker-compose.yml
 
 
-## &#9744; Stage 2:
+## &#9745; Stage 2:
 *   Add Grafana container for another front end
 *   Add Alertmanager
-*   Use Secrets for API key
+*   ~~Use Secrets for API key~~ //Seemed to need the project to expand to Docker Swarm as well
 
-## &#9744; Stage 3:
-*   Create an outflow for Alertmanager to ping slack channel/users (email as well?)
+## &#9745; Stage 3:
+*   ~~Create an outflow for Alertmanager to ping slack channel/users (email as well?)~~ //previously done; didn't create interesting enough alerts
 *   Define more complex storage options (updating configs while live, saving of tsdb, dashboard configs)
 
-## &#9744; Stage 4:
+## &#9745; Stage 4:
 *   Integrate an Logstash/ElasticSearch/Kibana stack for grabbing each container's logs
+
+<!-- checkbox without mark &#9744; -->
 
 <br>
 
@@ -66,7 +68,7 @@
 *   Create Schema map using Markdown's mermaid
 
 ## Goals:
-*   Use Docker Secrets
+*   ~~Use Docker Secrets~~
 *   Mix use of bind mounts and named volumes
     * How are Grafana dashboards stored?
     * updating configs and saving stateful data/longterm storage interests
